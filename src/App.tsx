@@ -123,7 +123,7 @@ const App: React.FC = () => {
             },
             response_type: 'code',
             client_id: '908eaf93b654400f95f7bb221967a65b',
-            redirect_uri: 'http://localhost:3000/auth',
+            redirect_uri: 'https://briaoeuidhtns.github.io/splat/auth',
             scope: 'user-read-playback-state user-modify-playback-state',
           })
         }
