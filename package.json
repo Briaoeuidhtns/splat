@@ -10,15 +10,22 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^5.1.5",
+    "oidc-react": "../oidc-react/oidc-react-v1.1.0.tgz",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-github-corner": "^2.5.0",
+    "react-query": "^2.23.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "spotify-web-api-js": "^1.5.0",
     "typescript": "~3.7.2"
   },
   "scripts": {
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -35,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.1.0"
   }
 }
