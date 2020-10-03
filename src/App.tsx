@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AuthProvider, useAuth, UserManager } from 'oidc-react'
 import { Route, useHistory } from 'react-router-dom'
 import Spotify from 'spotify-web-api-js'
@@ -9,6 +9,10 @@ const Dashboard: React.FC = () => {
   const accessToken = useAuth()?.userData?.access_token ?? null
   const spotify = useRef(new Spotify())
   const prevAlbum = useRef<string>()
+  const [progress, setProgress] = useState<{ i: number; of: number } | null>(
+    null
+  )
+
   spotify.current.setAccessToken(accessToken)
 
   const { data: current, error } = useQuery(
@@ -32,7 +36,11 @@ const Dashboard: React.FC = () => {
         limit: 50,
         offset: 1,
       })
-      for (const track of tracks.items) await spotify.current.queue(track.uri)
+      const of = tracks.items.length
+      for (const [i, track] of tracks.items.entries()) {
+        setProgress({ i, of })
+        await spotify.current.queue(track.uri)
+      }
     }
   )
 
@@ -51,11 +59,25 @@ const Dashboard: React.FC = () => {
   return (
     <div>
       <h1>Dashboard</h1>
-      {enqueueing.isLoading && 'enqueueing songs'}
-      {error
-        ? 'ERROR: ' +
-          JSON.parse((error as XMLHttpRequest).response).error.message
-        : 'TODO put something status-y here'}
+      {error ? (
+        <>
+          <b>ERROR: </b>
+          {JSON.parse((error as XMLHttpRequest).response).error.message}
+        </>
+      ) : (
+        <>
+          <b>TODO: </b>put something status-y here
+        </>
+      )}
+      {enqueueing.isLoading && (
+        <p>
+          enqueueing songs (
+          <code>
+            {progress?.i}/{progress?.of}
+          </code>
+          )
+        </p>
+      )}
     </div>
   )
 }
@@ -87,6 +109,7 @@ const About: React.FC = () => {
           Token sometimes doesn't auto refresh, in case of errors close/open
           page
         </li>
+        <li>Having it open in multiple tabs is prob bad</li>
       </ul>
 
       {userData?.access_token ? (
